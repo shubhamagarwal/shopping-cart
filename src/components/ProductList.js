@@ -4,16 +4,16 @@ import { connect } from "react-redux";
 import { saveProductList } from "../store/actions/ProductAction";
 import {addToCart} from "../store/actions/CartAction";
 import Filter from './Filter'; 
+import Product from './Product';
 import "./Product.css";
 
 const ProductList = (props) => {
   const [productList, setProductList] = useState([]);
   const [errorState, setErrorState] = useState(false);
   const [ filters, setFilters ] = useState([])
-  const { saveProductList, addToCart } = props;
+  const { saveProductList, addToCart, productData, cartItems } = props;
 
   const addToCartEvent = (e, product) => {
-    console.log(e, product);
     addToCart(product);
   }
 
@@ -43,36 +43,12 @@ const ProductList = (props) => {
           <Filter filters={filters}/>
       </div>
       <div className="product-container">
-        {productList &&
-          productList.map((product, i) => {
+        {productData && productData.length ?
+          (productData.map(product => {
             return (
-              <div className="product-labels" key={product.id}>
-                <figure className="card card-product">
-                  <div className="img-wrap">
-                    <img className="img-responsive" src={product.image} />
-                  </div>
-                  <div className="info-wrap">
-                    <h4 className="title">{product.title}</h4>
-                    <div className="product-desc">
-                      <p className="desc">
-                        <b>Color:</b> {product.colour && product.colour.title}
-                      </p>
-                      <p className="rating">
-                        <b>Rating:</b> {product.rating}
-                      </p>
-                      <p className="price">
-                        <b>Rs</b> {product.price && product.price.final_price}
-                      </p>
-                      <p className="brand">
-                        <b>Brand:</b> {product.brand}
-                      </p>
-                      <button onClick={(e) => addToCartEvent(e, product)}>Add to cart</button>
-                    </div>
-                  </div>
-                </figure>
-              </div>
+              <Product product={product} addToCartEvent={addToCartEvent} key={product.id} checkInCart={cartItems.length && cartItems.filter(item => item.product.id === product.id).length > 0 } />
             );
-          })}
+          })) : <div>Loading...</div>}
       </div>
     </div>
   );
@@ -80,7 +56,10 @@ const ProductList = (props) => {
 
 const mapStateToProps = (state) => {
     console.log('state', state)
-  return {};
+  return {
+      productData : state.productList.products,
+      cartItems: state.cartData.cart
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
