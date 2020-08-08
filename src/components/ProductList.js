@@ -2,21 +2,31 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { saveProductList } from "../store/actions/ProductAction";
+import {addToCart} from "../store/actions/CartAction";
+import Filter from './Filter'; 
 import "./Product.css";
 
 const ProductList = (props) => {
   const [productList, setProductList] = useState([]);
   const [errorState, setErrorState] = useState(false);
-  const { saveProductList } = props;
+  const [ filters, setFilters ] = useState([])
+  const { saveProductList, addToCart } = props;
+
+  const addToCartEvent = (e, product) => {
+    console.log(e, product);
+    addToCart(product);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios
-        .get(`https://xebiascart.herokuapp.com/products `)
+        await axios.all([
+            axios.get('https://xebiascart.herokuapp.com/products'),
+            axios.get(`https://xebiascart.herokuapp.com/filters`),
+          ])
         .then((result) => {
-          console.log("result", result);
-          setProductList(result && result.data);
-          saveProductList(result && result.data);
+          setProductList(result && result[0] && result[0].data);
+          setFilters(result && result[1] && result[1].data)
+          saveProductList(result && result[0] && result[0].data);
         })
         .catch((error) => {
           setErrorState(true);
@@ -25,42 +35,38 @@ const ProductList = (props) => {
     fetchData();
   }, [saveProductList]);
 
+  console.log('filters', filters);
+
   return (
     <div className="container">
-      <div className="filter-container"></div>
+      <div className="filter-container">
+          <Filter filters={filters}/>
+      </div>
       <div className="product-container">
         {productList &&
           productList.map((product, i) => {
             return (
-              <div key={product.id}>
+              <div className="product-labels" key={product.id}>
                 <figure className="card card-product">
                   <div className="img-wrap">
                     <img className="img-responsive" src={product.image} />
                   </div>
-                  <figcaption className="info-wrap">
+                  <div className="info-wrap">
                     <h4 className="title">{product.title}</h4>
-                    <p className="desc">
-                      Color: {product.colour && product.colour.title}
-                    </p>
-                  </figcaption>
-                  <div className="bottom-wrap">
-                    <span className="btn btn-success">Added to cart</span>
-                    {/* {this.state.inCart ? (
-                      <span className="btn btn-success">Added to cart</span>
-                    ) : (
-                      <a
-                        href="#"
-                        
-                        className="btn btn-sm btn-primary float-right"
-                      >
-                        Add to cart
-                      </a>
-                    )} */}
-
-                    <div className="price-wrap h5">
-                      <span className="price-new">
-                        {product.price && product.price.final_price}
-                      </span>
+                    <div className="product-desc">
+                      <p className="desc">
+                        <b>Color:</b> {product.colour && product.colour.title}
+                      </p>
+                      <p className="rating">
+                        <b>Rating:</b> {product.rating}
+                      </p>
+                      <p className="price">
+                        <b>Rs</b> {product.price && product.price.final_price}
+                      </p>
+                      <p className="brand">
+                        <b>Brand:</b> {product.brand}
+                      </p>
+                      <button onClick={(e) => addToCartEvent(e, product)}>Add to cart</button>
                     </div>
                   </div>
                 </figure>
@@ -73,6 +79,7 @@ const ProductList = (props) => {
 };
 
 const mapStateToProps = (state) => {
+    console.log('state', state)
   return {};
 };
 
@@ -81,6 +88,9 @@ const mapDispatchToProps = (dispatch) => {
     saveProductList: (product) => {
       dispatch(saveProductList(product));
     },
+    addToCart: (product) => {
+        dispatch(addToCart(product));
+    }
   };
 };
 

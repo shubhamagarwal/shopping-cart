@@ -1,40 +1,129 @@
+.product-labels {
+  width: 33%;
+}
 .container {
-    display: flex;
+  display: flex;
+  margin-top: 50px;
 }
 .product-container {
-    display: flex;
-    flex: .75;
-    justify-content: space-between;
-    flex-direction: row;
-    flex-wrap: wrap;
+  display: flex;
+  flex: 0.78;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.filter-header {
+  display: flex;
 }
 
 .filter-container {
-    flex: .25;
+  flex: 0.22;
+  padding: 8px;
+}
+
+.filter-desc {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.06);
+}
+
+.filter-heading {
+  font-size: 18px;
+  text-transform: capitalize;
+  width: 67%;
+}
+
+.reset-filter {
+  font-size: 16px;
+  color: blue;
+}
+
+.color-container {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 3%;
+  justify-content: space-between;
+}
+
+.color-item {
+  flex-basis: calc(50% - 10px);
+  margin: 5px;
+}
+
+.price-container {
+  color: #a3a3a3;
+  font-size: 14px;
+  margin: 10px 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.min-range {
+  display: inline-block;
+  /* flex-grow: 2; */
+}
+
+.to {
+  display: inline-block;
+  margin: 0 9px;
+  font-size: 14px;
+  color: #878787;
+  line-height: 1;
+  flex: 1;
+  text-align: center;
+}
+.max-range {
+  display: inline-block;
+  margin-left: 1.5px;
+  flex-grow: 2;
+}
+
+.product-desc {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+section {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .card-product .img-wrap {
-    border-radius: 3px 3px 0 0;
-    overflow: hidden;
-    position: relative;
-    height: 220px;
-    text-align: center;
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  text-align: center;
 }
 .card-product .img-wrap img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: cover;
-}
-.card-product .info-wrap {
-    overflow: hidden;
-    padding: 15px;
-    border-top: 1px solid #eee;
-}
-.card-product .bottom-wrap {
-    padding: 15px;
-    border-top: 1px solid #eee;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: cover;
 }
 
-.card-product .price-old {
-    color: #999;
+.brand-container {
+  overflow: scroll;
+  height: 150px;
+}
+
+.search-brand {
+  width: 65%;
+  margin-top: 4%;
+  border-width: 0 0 2px;
+  height: 20px;
+  font-size: 14px;
+  padding: 0 0 0 5px;
+  color: #878787;
+  outline: none;
+}
+.desc,
+.rating,
+.price,
+.brand {
+  flex-basis: calc(50% - 10px);
+  margin: 5px;
 }
