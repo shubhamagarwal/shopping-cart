@@ -22,7 +22,7 @@ const Filter = (props) => {
         
         return filterObj;
     },[filters])
-    console.log('filters', filterData)
+    console.log('filters',filters)
     return(
         <div className="filter-desc">
              <section>
@@ -42,6 +42,23 @@ const Filter = (props) => {
                                 
                                     <input type="checkbox" value={value.color} onClick={(e) => handleFilter(e, 'color')} />
                                     <span>{value.title}</span>
+                                
+                            </div>
+                        )
+                    })}
+                </div>
+            </section>
+            <section>
+                <div>
+                    <div className="Rating-title"><span>Rating</span></div>
+                </div>
+                <div className="rating-container">
+                    {[1,2,3,4,5].map(value => {
+                        return(
+                            <div className="rating-item" key={value}>
+                                
+                                    <input type="checkbox" value={value} onClick={(e) => handleFilter(e, 'rating')} />
+                                    <span>{value}</span>
                                 
                             </div>
                         )
@@ -86,7 +103,7 @@ const Filter = (props) => {
                         {filterData && filterData.brandArr && filterData.brandArr.map((value,i) => {
                             return(
                                 <div className="brand-item" key={i}>
-                                    <input type="checkbox" value={value.value}/>
+                                    <input type="checkbox" value={value.value} onClick={(e) => handleFilter(e, 'brand')}/>
                                     <span>{value.title}</span>
                                 </div>
                             )

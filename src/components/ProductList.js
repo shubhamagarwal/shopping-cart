@@ -11,6 +11,7 @@ import "./Product.css";
 const ProductList = (props) => {
   const [productList, setProductList] = useState([]);
   const [errorState, setErrorState] = useState(false);
+  const [filterFlag, setFilterFlag] = useState(false)
   const [ filters, setFilters ] = useState([])
   const { saveProductList, addToCart, productData, cartItems } = props;
   const history = useHistory();
@@ -21,10 +22,23 @@ const ProductList = (props) => {
 
   const resetFilter = () => {
     saveProductList(productList);
+    setFilterFlag(false)
   }
 
   const handleFilter = (e, type) => {
-      alert(e.target.value)
+      let url = 'https://xebiascart.herokuapp.com/products' 
+      if(e.target.checked && type === 'brand') {
+        url = `${url}?brand=${e.target.value}`
+      }
+      axios
+      .get(url)
+      .then((result) => {
+        setFilterFlag(true)
+        saveProductList(result && result.data);
+      })
+      .catch((error) => {
+        history.push("/error");
+      });
   }
 
   useEffect(() => {
@@ -57,7 +71,7 @@ const ProductList = (props) => {
             return (
               <Product product={product} addToCartEvent={addToCartEvent} key={product.id} checkInCart={cartItems.length && cartItems.filter(item => item.product.id === product.id).length > 0 } />
             );
-          })) : <div>Loading...</div>}
+          })) : <div>{filterFlag ? 'No result found' : 'Loading...' }</div>}
       </div>
     </div>
   );
