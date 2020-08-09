@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import axios from "axios";
+import { saveProductList } from '../store/actions/ProductAction';
 import "./Header.css";
 
 const Header = (props) => {
   const [searchText, setSearchText] = useState("");
-  const { cartItems } = props;
+  const { cartItems, saveProductList } = props;
   let total = 0;
   cartItems.map(
     (item) =>
@@ -13,7 +15,14 @@ const Header = (props) => {
   );
 
   const handleSearch = () => {
-      alert('sfd')
+    axios.get(`https://xebiascart.herokuapp.com/products?title=${searchText}`)
+        .then(result => {
+            console.log('sdata', result);
+            saveProductList(result && result.data);
+        })
+        .catch(error => {
+
+        })
   }
 
   return (
@@ -32,7 +41,7 @@ const Header = (props) => {
               className="input-search"
               title="Search for products, brands"
               name="q"
-              autocomplete="off"
+              autoComplete="off"
               placeholder="Search for products, brands"
               onChange={(e) => setSearchText(e.target.value)}
             />
@@ -88,4 +97,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch) => {
+    return {
+      saveProductList: (product) => {
+        dispatch(saveProductList(product));
+      }
+    };
+  };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

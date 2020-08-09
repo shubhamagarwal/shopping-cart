@@ -17,6 +17,14 @@ const ProductList = (props) => {
     addToCart(product);
   }
 
+  const resetFilter = () => {
+    saveProductList(productList);
+  }
+
+  const handleFilter = (e, type) => {
+      alert(e.target.value)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
         await axios.all([
@@ -35,12 +43,10 @@ const ProductList = (props) => {
     fetchData();
   }, [saveProductList]);
 
-  console.log('filters', filters);
-
   return (
     <div className="container">
       <div className="filter-container">
-          <Filter filters={filters}/>
+          <Filter filters={filters} resetFilter={resetFilter} handleFilter={handleFilter} />
       </div>
       <div className="product-container">
         {productData && productData.length ?

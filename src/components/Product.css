@@ -37,6 +37,7 @@
 .reset-filter {
   font-size: 16px;
   color: blue;
+  cursor: pointer;
 }
 
 .color-container {
