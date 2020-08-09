@@ -1,3 +1,8 @@
+## Note
+```
+Login page is created using Material-ui, apart from that I have created my own components and html,css for the rest of the projects.
+```
+
 ## Prerequisites
 
 ```
@@ -11,6 +16,7 @@ npm
 ```
 React JS
 JavaScript
+Redux
 Enzyme
 chai
 etc
