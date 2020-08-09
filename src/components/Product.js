@@ -37,7 +37,7 @@ const Product = (props) => {
               <b>Brand:</b> {product.brand.substring(0,10)}
             </p>
             {!checkInCart ? (
-              <button onClick={(e) => addToCartEvent(e, product)}>
+              <button className="add-cart" onClick={(e) => addToCartEvent(e, product)}>
                 Add to cart
               </button>
             ) : (

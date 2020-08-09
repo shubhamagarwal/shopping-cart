@@ -137,3 +137,21 @@ section {
   flex-basis: calc(50% - 10px);
   margin: 5px;
 }
+
+.add-cart {
+  background-color: blue;
+  color: white;
+  border: 2px solid white;
+}
+
+.added-cart {
+  background-color: blueviolet;
+  color: white;
+  border: 2px solid white;
+}
+
+.no-result {
+  padding: 200px 482px;
+  font-size: large;
+  font-weight: 800;
+}

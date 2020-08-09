@@ -1,15 +1,11 @@
-import React, {Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 function App(props) {
   const { userInfo } = props;
   const requireAuth = () => {
-    const isLoggedIn =
-      userInfo && userInfo.userDetails && userInfo.userDetails.length
-        ? true
-        : false;
-    return true;
+    return userInfo && userInfo.userDetails && userInfo.userDetails.length;
   };
 
   const Login = lazy(() => import("./components/Login"));
@@ -32,7 +28,11 @@ function App(props) {
                 requireAuth() ? <ProductList /> : <Redirect to="/" />
               }
             />
-            <Route exact path="/error" component={Error} />
+            <Route
+              exact
+              path="/error"
+              render={() => (requireAuth() ? <Error /> : <Redirect to="/" />)}
+            />
             <Route component={Page404} />
           </Switch>
         </div>

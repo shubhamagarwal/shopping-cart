@@ -25,7 +25,7 @@ const ProductList = (props) => {
     setFilterFlag(false)
   }
 
-  const handleFilter = (e, type) => {
+  const handleFilter = React.useCallback((e, type) => {
       let url = 'https://xebiascart.herokuapp.com/products' 
       if(e.target.checked && type === 'brand') {
         url = `${url}?brand=${e.target.value}`
@@ -39,7 +39,7 @@ const ProductList = (props) => {
       .catch((error) => {
         history.push("/error");
       });
-  }
+  },[history, saveProductList])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,7 +71,7 @@ const ProductList = (props) => {
             return (
               <Product product={product} addToCartEvent={addToCartEvent} key={product.id} checkInCart={cartItems.length && cartItems.filter(item => item.product.id === product.id).length > 0 } />
             );
-          })) : <div>{filterFlag ? 'No result found' : 'Loading...' }</div>}
+          })) : <div className="no-result">{filterFlag ? 'No result found' : 'Loading...' }</div>}
       </div>
     </div>
   );

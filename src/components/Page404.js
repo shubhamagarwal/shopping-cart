@@ -6,4 +6,4 @@ const Page404 = ({ location }) => (
     </div>
  );
 
- export default Page404;
+ export default React.memo(Page404);
