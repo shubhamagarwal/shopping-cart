@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import {  useHistory } from 'react-router-dom';
 import { saveProductList } from "../store/actions/ProductAction";
 import {addToCart} from "../store/actions/CartAction";
 import Filter from './Filter'; 
@@ -12,6 +13,7 @@ const ProductList = (props) => {
   const [errorState, setErrorState] = useState(false);
   const [ filters, setFilters ] = useState([])
   const { saveProductList, addToCart, productData, cartItems } = props;
+  const history = useHistory();
 
   const addToCartEvent = (e, product) => {
     addToCart(product);
@@ -38,10 +40,11 @@ const ProductList = (props) => {
         })
         .catch((error) => {
           setErrorState(true);
+          history.push("/error");
         });
     };
     fetchData();
-  }, [saveProductList]);
+  }, [saveProductList, history]);
 
   return (
     <div className="container">
@@ -61,7 +64,6 @@ const ProductList = (props) => {
 };
 
 const mapStateToProps = (state) => {
-    console.log('state', state)
   return {
       productData : state.productList.products,
       cartItems: state.cartData.cart

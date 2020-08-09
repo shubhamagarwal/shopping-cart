@@ -8,6 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
 import {  useHistory } from 'react-router-dom';
+import { connect } from "react-redux";
+import { loginDetails } from '../store/actions/LoginAction';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,12 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [errorState, setErrorState] = useState(false)
   const [ validationFlag, setValidationFlag] = useState(false)
+  const { loginDetails } = props;
   const history = useHistory();
 
   const validateForm = () => {
@@ -47,10 +50,11 @@ const Login = () => {
             console.log(result)
             if(result && result.status === 200 && result.data && result.data.length) {
                 setValidationFlag(false)
+                loginDetails(result && result.data)
                 history.push("/product-list");
             } else {
-                console.log('here')
                 setValidationFlag(true)
+                setErrorState(true)
             }
         })
         .catch(error => {
@@ -110,4 +114,18 @@ const Login = () => {
   );
 };
 
-export default Login;
+
+const mapStateToProps = (state) => {
+  return {
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+      loginDetails: (userDetails) => {
+        dispatch(loginDetails(userDetails));
+      }
+    };
+  };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
