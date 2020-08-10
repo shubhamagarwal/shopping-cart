@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import {  useHistory } from 'react-router-dom';
+import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import { saveProductList } from "../store/actions/ProductAction";
-import Search from './Search';
+import Search from "./Search";
 import "./Header.css";
 
 const Header = (props) => {
@@ -32,23 +32,25 @@ const Header = (props) => {
   return (
     <header>
       <div className="row">
-        <img
-          src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_4ee2f9.png"
-          alt="filpkart-logo"
-          className="filpkart-logo"
-        />
-        {
-          userInfo && userInfo.userDetails && userInfo.userDetails.length ? 
-            (<Search 
-              cartItems={cartItems} 
-              setSearchText={setSearchText} 
-              searchText={searchText} 
-              handleSearch={handleSearch} 
-              total={total}
-            />) : ''
-        }
-        
-        
+        <Link to="/">
+          <img
+            src="https://img1a.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_4ee2f9.png"
+            alt="filpkart-logo"
+            className="filpkart-logo"
+          />
+        </Link>
+
+        {userInfo && userInfo.userDetails && userInfo.userDetails.length ? (
+          <Search
+            cartItems={cartItems}
+            setSearchText={setSearchText}
+            searchText={searchText}
+            handleSearch={handleSearch}
+            total={total}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </header>
   );
@@ -57,7 +59,7 @@ const Header = (props) => {
 const mapStateToProps = (state) => {
   return {
     cartItems: state.cartData.cart,
-    userInfo: state.user.userDetails
+    userInfo: state.user.userDetails,
   };
 };
 
