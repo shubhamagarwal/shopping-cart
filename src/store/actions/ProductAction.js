@@ -23,9 +23,8 @@ export const filterFailure = error => {
 }
 
 export const handleProductFilter = (filterDetails) => {
-  const  { brand, color, rating } = filterDetails;
-  const endPoint = `https://xebiascart.herokuapp.com/products?brand=${brand}`;
-  console.log('myname,', filterDetails, endPoint, brand, color, rating)
+  const  { brand, rating } = filterDetails;
+  const endPoint = `https://xebiascart.herokuapp.com/products?brand=${brand}&rating=${rating}`;
     return (dispatch) => {
       dispatch(fetchFilterProduct())
       axios

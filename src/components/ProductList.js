@@ -31,7 +31,7 @@ const ProductList = (props) => {
   }
 
   const handleFilter = React.useCallback((e, type) => {
-      if(e.target.checked) {
+      if(e.target.checked && (type === 'brand' || type === 'rating')) {
         setUserApplyFilter({
           ...userApplyFilter,
           [type]: e.target.value

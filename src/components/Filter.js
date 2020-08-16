@@ -33,6 +33,26 @@ const Filter = (props) => {
             </section>
             <section>
                 <div>
+                    <div className="brand-title"><span>Brand</span></div>
+                </div>
+                <div>
+                     <div>
+                         <input type="text" className="search-brand" placeholder="Search brand" />
+                     </div>
+                     <div className="brand-container">
+                        {filterData && filterData.brandArr && filterData.brandArr.map((value,i) => {
+                            return(
+                                <div className="brand-item" key={i}>
+                                    <input type="checkbox" value={value.value} onClick={(e) => handleFilter(e, 'brand')}/>
+                                    <span>{value.title}</span>
+                                </div>
+                            )
+                        })}
+                    </div>           
+                </div>
+            </section>
+            <section>
+                <div>
                     <div className="color-title"><span>Colour</span></div>
                 </div>
                 <div className="color-container">
@@ -89,26 +109,6 @@ const Filter = (props) => {
                             })}
                         </select>
                     </div>
-                </div>
-            </section>
-            <section>
-                <div>
-                    <div className="brand-title"><span>Brand</span></div>
-                </div>
-                <div>
-                     <div>
-                         <input type="text" className="search-brand" placeholder="Search brand" />
-                     </div>
-                     <div className="brand-container">
-                        {filterData && filterData.brandArr && filterData.brandArr.map((value,i) => {
-                            return(
-                                <div className="brand-item" key={i}>
-                                    <input type="checkbox" value={value.value} onClick={(e) => handleFilter(e, 'brand')}/>
-                                    <span>{value.title}</span>
-                                </div>
-                            )
-                        })}
-                    </div>           
                 </div>
             </section>
         </div>
