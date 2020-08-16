@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import {  useHistory } from 'react-router-dom';
-import { saveProductList } from "../store/actions/ProductAction";
+import { saveProductList, fetchProducts } from "../store/actions/ProductAction";
 import {addToCart} from "../store/actions/CartAction";
 import Filter from './Filter'; 
 import Product from './Product';
@@ -13,7 +13,7 @@ const ProductList = (props) => {
   const [errorState, setErrorState] = useState(false);
   const [filterFlag, setFilterFlag] = useState(false)
   const [ filters, setFilters ] = useState([])
-  const { saveProductList, addToCart, productData, cartItems } = props;
+  const { saveProductList, addToCart, productData, cartItems, fetchProducts } = props;
   const history = useHistory();
 
   const addToCartEvent = (e, product) => {
@@ -48,11 +48,14 @@ const ProductList = (props) => {
             axios.get(`https://xebiascart.herokuapp.com/filters`),
           ])
         .then((result) => {
+          
           setProductList(result && result[0] && result[0].data);
           setFilters(result && result[1] && result[1].data)
           saveProductList(result && result[0] && result[0].data);
+          
         })
         .catch((error) => {
+          console.log('error', error)
           setErrorState(true);
           history.push("/error");
         });
@@ -91,7 +94,8 @@ const mapDispatchToProps = (dispatch) => {
     },
     addToCart: (product) => {
         dispatch(addToCart(product));
-    }
+    },
+    fetchProducts: () => dispatch(fetchProducts())
   };
 };
 

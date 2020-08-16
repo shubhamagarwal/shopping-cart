@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -6,10 +6,9 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import axios from 'axios';
 import {  useHistory } from 'react-router-dom';
 import { connect } from "react-redux";
-import { loginDetails } from '../store/actions/LoginAction';
+import { fetchUsersDetails } from '../store/actions/LoginAction';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,31 +34,27 @@ const Login = (props) => {
   const classes = useStyles();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [errorState, setErrorState] = useState(false)
   const [ validationFlag, setValidationFlag] = useState(false)
-  const { loginDetails } = props;
+  const { fetchUsersDetails, userDetails } = props;
   const history = useHistory();
 
   const validateForm = () => {
     return username.length > 0 && password.length > 0;
   };
 
+  useEffect(() => {
+    if(userDetails && userDetails.isLoggedIn) {
+      history.push("/product-list");
+      setValidationFlag(false)
+    } else if (userDetails && userDetails.error !== '') {
+      setValidationFlag(true)
+    } else {
+
+    }
+  },[history, userDetails])
+
   const handleSubmit = (event) => {
-    axios.get(`https://xebiascart.herokuapp.com/users?username=${username}&&password=${password}`)
-        .then(result => {
-            console.log(result)
-            if(result && result.status === 200 && result.data && result.data.length) {
-                setValidationFlag(false)
-                loginDetails(result && result.data)
-                history.push("/product-list");
-            } else {
-                setValidationFlag(true)
-                setErrorState(true)
-            }
-        })
-        .catch(error => {
-            console.log(error)
-        })
+    fetchUsersDetails(username, password);
     event.preventDefault();
   }
 
@@ -117,13 +112,14 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    userDetails : state.user
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-      loginDetails: (userDetails) => {
-        dispatch(loginDetails(userDetails));
+      fetchUsersDetails: (username, password) => {
+        dispatch(fetchUsersDetails(username, password));
       }
     };
   };
