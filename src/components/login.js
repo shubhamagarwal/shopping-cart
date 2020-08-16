@@ -49,7 +49,7 @@ const Login = (props) => {
     } else if (userDetails && userDetails.error !== '') {
       setValidationFlag(true)
     } else {
-
+      //
     }
   },[history, userDetails])
 

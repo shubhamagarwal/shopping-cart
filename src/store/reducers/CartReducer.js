@@ -1,5 +1,7 @@
 const initialState = {
+  loading: false,
   cart: [],
+  error: ''
 };
 
 const cartReducer = (state = initialState, action) => {

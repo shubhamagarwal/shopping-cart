@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import {  useHistory } from 'react-router-dom';
-import { saveProductList, fetchProducts } from "../store/actions/ProductAction";
+import { saveProductList, handleProductFilter } from "../store/actions/ProductAction";
 import {addToCart} from "../store/actions/CartAction";
 import Filter from './Filter'; 
 import Product from './Product';
@@ -11,9 +11,14 @@ import "./Product.css";
 const ProductList = (props) => {
   const [productList, setProductList] = useState([]);
   const [errorState, setErrorState] = useState(false);
-  const [filterFlag, setFilterFlag] = useState(false)
+  const [filterFlag, setFilterFlag] = useState(false);
+  const [ userApplyFilter, setUserApplyFilter ] = useState({
+    color: '',
+    rating: '',
+    brand: ''
+  })
   const [ filters, setFilters ] = useState([])
-  const { saveProductList, addToCart, productData, cartItems, fetchProducts } = props;
+  const { saveProductList, addToCart, productData, cartItems, handleProductFilter } = props;
   const history = useHistory();
 
   const addToCartEvent = (e, product) => {
@@ -26,20 +31,25 @@ const ProductList = (props) => {
   }
 
   const handleFilter = React.useCallback((e, type) => {
-      let url = 'https://xebiascart.herokuapp.com/products' 
-      if(e.target.checked && type === 'brand') {
-        url = `${url}?brand=${e.target.value}`
-      }
-      axios
-      .get(url)
-      .then((result) => {
+      if(e.target.checked) {
+        setUserApplyFilter({
+          ...userApplyFilter,
+          [type]: e.target.value
+        })
         setFilterFlag(true)
-        saveProductList(result && result.data);
-      })
-      .catch((error) => {
-        history.push("/error");
-      });
-  },[history, saveProductList])
+      } else {
+        setUserApplyFilter({
+          ...userApplyFilter,
+          [type]: ''
+        })
+      }
+  },[userApplyFilter])
+
+  useEffect(() => {
+    if(filterFlag) {
+      handleProductFilter(userApplyFilter)
+    }
+  },[filterFlag, handleProductFilter, userApplyFilter])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +65,6 @@ const ProductList = (props) => {
           
         })
         .catch((error) => {
-          console.log('error', error)
           setErrorState(true);
           history.push("/error");
         });
@@ -63,6 +72,7 @@ const ProductList = (props) => {
     fetchData();
   }, [saveProductList, history]);
 
+  console.log('userApplyFilteruserApplyFilter', userApplyFilter)
   return (
     <div className="container">
       <div className="filter-container">
@@ -95,7 +105,9 @@ const mapDispatchToProps = (dispatch) => {
     addToCart: (product) => {
         dispatch(addToCart(product));
     },
-    fetchProducts: () => dispatch(fetchProducts())
+    handleProductFilter: (userApplyFilter) => {
+      dispatch(handleProductFilter(userApplyFilter))
+    }
   };
 };
 

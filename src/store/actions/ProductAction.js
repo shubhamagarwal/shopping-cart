@@ -1,29 +1,40 @@
 import axios from 'axios'
 
+export const fetchFilterProduct = () => {
+  return {
+    type: 'FETCH_FILTER_REQUEST'
+  }
+}
+
 export const saveProductList = (list) => {
     return {
-        type: 'ADD_PRODUCT_LIST',
+        type: 'FILTER_PRODUCT_SUCCESS',
         payload: {
             list
         }
     }
 }
 
-export const fetchProducts = () => {
+export const filterFailure = error => {
+  return {
+    type: 'PRODUCT_FILTER_FAILURE',
+    payload: error
+  }
+}
+
+export const handleProductFilter = (filterDetails) => {
+  const  { brand, color, rating } = filterDetails;
+  const endPoint = `https://xebiascart.herokuapp.com/products?brand=${brand}`;
+  console.log('myname,', filterDetails, endPoint, brand, color, rating)
     return (dispatch) => {
-      //dispatch(fetchUsersRequest())
-        axios.all([
-            axios.get('https://xebiascart.herokuapp.com/products'),
-            axios.get(`https://xebiascart.herokuapp.com/filters`),
-        ])
-        .then((result) => {
-        
-        //setFilters(result && result[1] && result[1].data)
-        dispatch(saveProductList(result && result[0] && result[0].data));
-        
-        })
-        .catch(error => {
-          //dispatch(fetchUsersFailure(error.message))
-        })
+      dispatch(fetchFilterProduct())
+      axios
+      .get(endPoint)
+      .then((result) => {
+        dispatch(saveProductList(result && result.data));
+      })
+      .catch((error) => {
+        dispatch(filterFailure(error.message))
+      });
     }
   }
