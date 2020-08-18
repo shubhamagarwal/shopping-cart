@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import {  useHistory } from 'react-router-dom';
 import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 import { fetchUsersDetails } from '../store/actions/LoginAction';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -93,6 +94,7 @@ const Login = (props) => {
           />
         {validationFlag ? (<div>Username Or Password Invalid.</div>) : ''}
           <Button
+            id="signIn"
             type="submit"
             fullWidth
             variant="contained"
@@ -109,6 +111,13 @@ const Login = (props) => {
   );
 };
 
+Login.defaultProps = {
+  userInfo: {}
+}
+
+Login.propTypes = {
+  userInfo: PropTypes.shape({})
+}
 
 const mapStateToProps = (state) => {
   return {

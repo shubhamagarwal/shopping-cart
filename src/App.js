@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import PropTypes from 'prop-types'
 
 function App(props) {
   const { userInfo } = props;
@@ -41,6 +42,9 @@ function App(props) {
   );
 }
 
+App.propTypes = {
+  userInfo: PropTypes.shape({}).isRequired
+}
 const mapStateToProps = (state) => {
   return {
     userInfo: state.user.userDetails,
