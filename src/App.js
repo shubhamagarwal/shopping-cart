@@ -9,7 +9,7 @@ function App(props) {
     return userInfo && userInfo.userDetails && userInfo.userDetails.length;
   };
 
-  const Login = lazy(() => import("./components/Login"));
+  const Login = lazy(() => import("./components/login"));
   const ProductList = lazy(() => import("./components/ProductList"));
   const Header = lazy(() => import("./components/Header"));
   const Page404 = lazy(() => import("./components/Page404"));
